@@ -10,21 +10,7 @@ from .models import Team
 
 
 
-def login(request):
-    if request.method =='POST':
-        userName = request.POST['UserName']
-        password = request.POST['Password']
-        user=auth.authenticate(username=userName,password=password)
 
-        if user is None:
-            messages.info(request, "Invalid Credentials")
-            return redirect('login')
-
-        else:
-            auth.login(request, user)
-            return redirect('/')
-
-    return render(request,"login.html")
 
 def register(request):
     if request.method=='POST':
@@ -50,6 +36,22 @@ def register(request):
             return redirect('register')
 
     return render(request,"register.html")
+
+def login(request):
+    if request.method =='POST':
+        userName = request.POST['UserName']
+        password = request.POST['Password']
+        user=auth.authenticate(username=userName,password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+
+        else:
+            messages.info(request, "Invalid Credentials")
+            return redirect('login')
+
+    return render(request,"login.html")
 
 
 def logout(request):
